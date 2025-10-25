@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">The Luxe</string>
+    <string-array name="fashion_styles">
+        <item>Classic</item>
+        <item>Minimalist</item>
+        <item>Streetwear</item>
+        <item>Bohemian</item>
+        <item>Chic</item>
+    </string-array>
+    <string name="privacy_policy_content">This is the privacy policy content. We respect your privacy and are committed to protecting it through our compliance with this policy.</string>
+    <string name="terms_of_service_content">These terms and conditions outline the rules and regulations for the use of The Luxe\'s Website, located at theluxe.com.</string>
+    <string name="copyright_policy_content">All content included on this app, such as text, graphics, logos, images, is the property of The Luxe or its content suppliers and protected by international copyright laws.</string>
+    <string name="faq_content">This is the FAQ content. Q: How do I return an item? A: Please contact our support team.</string>
+</resources>

@@ -3,7 +3,6 @@ package com.example.theluxe.view.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +11,8 @@ import com.example.theluxe.R;
 import com.example.theluxe.viewmodel.RegisterViewModel;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -47,9 +48,9 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         buttonRegister.setOnClickListener(v -> {
-            String email = editTextEmail.getText().toString();
-            String password = editTextPassword.getText().toString();
-            String confirmPassword = editTextConfirmPassword.getText().toString();
+            String email = Objects.requireNonNull(editTextEmail.getText()).toString();
+            String password = Objects.requireNonNull(editTextPassword.getText()).toString();
+            String confirmPassword = Objects.requireNonNull(editTextConfirmPassword.getText()).toString();
 
             if (!password.equals(confirmPassword)) {
                 Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();

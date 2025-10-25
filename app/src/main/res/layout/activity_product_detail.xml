@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,6 +15,7 @@
             android:id="@+id/imageViewProductDetail"
             android:layout_width="match_parent"
             android:layout_height="400dp"
+            android:contentDescription="imageViewProductDetail"
             android:scaleType="centerCrop"
             android:background="#EAEAEA"/>
 
@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Add to Cart"/>
+                android:text="@string/add_to_cart"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonAddToWishlist"
@@ -73,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Add to Wishlist"
+                android:text="@string/add_to_wishlist"
                 android:textColor="@color/text_primary"/>
 
         </LinearLayout>
@@ -89,7 +89,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Complete the Outfit"
+            android:text="@string/complete_the_outfit"
             android:textAppearance="?attr/textAppearanceHeadline1"
             android:textSize="22sp"
             android:padding="24dp"/>

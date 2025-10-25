@@ -12,7 +12,7 @@
         android:id="@+id/textViewTotalAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total: 0 VND"
+        android:text="@string/total_0_vnd"
         android:textSize="24sp"
         android:layout_marginBottom="32dp"/>
 
@@ -20,6 +20,6 @@
         android:id="@+id/buttonPay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Proceed to VNPay"/>
+        android:text="@string/proceed_to_vnpay"/>
 
 </LinearLayout>

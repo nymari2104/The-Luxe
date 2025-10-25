@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Support"
+        android:text="@string/support"
         android:textAppearance="?attr/textAppearanceHeadline1"
         android:textSize="28sp"
         android:layout_marginBottom="24dp"/>
@@ -27,10 +27,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="FAQ"
+            android:text="@string/faq"
             android:padding="16dp"
-            android:drawableEnd="@drawable/ic_chevron_right"
-            android:textAppearance="?attr/textAppearanceSubtitle1"/>
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            app:drawableEndCompat="@drawable/ic_chevron_right" />
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
@@ -44,10 +44,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Chat with Admin"
+            android:text="@string/chat_with_admin"
             android:padding="16dp"
-            android:drawableEnd="@drawable/ic_chevron_right"
-            android:textAppearance="?attr/textAppearanceSubtitle1"/>
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            app:drawableEndCompat="@drawable/ic_chevron_right" />
     </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

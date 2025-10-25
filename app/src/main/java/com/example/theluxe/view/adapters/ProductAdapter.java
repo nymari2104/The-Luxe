@@ -1,5 +1,6 @@
 package com.example.theluxe.view.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,16 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
+
 import com.example.theluxe.R;
 import com.example.theluxe.model.Product;
 import com.example.theluxe.view.activities.ProductDetailActivity;
 import com.example.theluxe.viewmodel.WishlistViewModel;
-import java.util.ArrayList;
-import java.util.HashSet;
+
 import java.util.List;
-import java.util.Set;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
@@ -43,6 +41,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         return new ProductViewHolder(view);
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
@@ -79,6 +78,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         return (productList != null) ? productList.size() : 0;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setWishlist(List<Product> wishlist) {
         this.wishlist.clear();
         this.wishlist.addAll(wishlist);

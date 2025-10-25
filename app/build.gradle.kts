@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -64,20 +65,18 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation("androidx.lifecycle:lifecycle-viewmodel:2.9.4")
-    implementation("androidx.lifecycle:lifecycle-livedata:2.9.4")
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.lifecycle.livedata)
 
-    val room_version = "2.6.1"
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
 
-    implementation("androidx.recyclerview:recyclerview:1.4.0")
-//    implementation("com.paypal.checkout:android-sdk:1.3.0")
-    implementation(platform("com.google.firebase:firebase-bom:34.4.0"))
-    implementation("com.google.android.gms:play-services-base:18.9.0") // Hoặc phiên bản mới hơn
-    implementation("com.google.firebase:firebase-messaging")
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation(libs.recyclerview)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.play.services.base) // Hoặc phiên bản mới hơn
+    implementation(libs.google.firebase.messaging)
+    implementation(libs.firebase.analytics)
+    implementation(libs.gson)
     implementation(libs.firebase.messaging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

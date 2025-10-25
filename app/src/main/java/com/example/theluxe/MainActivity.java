@@ -1,13 +1,7 @@
 package com.example.theluxe;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import com.example.theluxe.view.fragments.CartFragment;
 import com.example.theluxe.view.fragments.ProductListFragment;
@@ -16,6 +10,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import com.example.theluxe.view.fragments.WishlistFragment;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import android.util.Log;
 
@@ -34,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new ProductListFragment()).commit();
         }
+        Log.d("FirebaseApp", "Before init count: " + FirebaseApp.getApps(this).size());
+        FirebaseApp.initializeApp(this);
+        Log.d("FirebaseApp", "After init count: " + FirebaseApp.getApps(this).size());
 
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
@@ -48,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+    private final BottomNavigationView.OnNavigationItemSelectedListener navListener =
             item -> {
                 Fragment selectedFragment = null;
 
@@ -62,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     selectedFragment = new ProfileFragment();
                 }
 
+                assert selectedFragment != null;
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         selectedFragment).commit();
 

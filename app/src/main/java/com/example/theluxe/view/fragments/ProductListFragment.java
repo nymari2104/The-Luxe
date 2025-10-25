@@ -65,12 +65,10 @@ public class ProductListFragment extends Fragment {
         productViewModel.getProducts();
 
         // Observe data
-        wishlistViewModel.getWishlist().observe(getViewLifecycleOwner(), wishlist -> {
-            productViewModel.products.observe(getViewLifecycleOwner(), products -> {
-                productAdapter = new ProductAdapter(products, wishlistViewModel, wishlist, userEmail);
-                recyclerViewProducts.setAdapter(productAdapter);
-            });
-        });
+        wishlistViewModel.getWishlist().observe(getViewLifecycleOwner(), wishlist -> productViewModel.products.observe(getViewLifecycleOwner(), products -> {
+            productAdapter = new ProductAdapter(products, wishlistViewModel, wishlist, userEmail);
+            recyclerViewProducts.setAdapter(productAdapter);
+        }));
         
         if (userEmail != null) {
             recommendationViewModel.getRecommendations(userEmail).observe(getViewLifecycleOwner(), recommendedProducts -> {

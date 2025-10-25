@@ -1,5 +1,6 @@
 package com.example.theluxe.view.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerViewOutfit;
     private ProductAdapter outfitAdapter;
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

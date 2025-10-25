@@ -40,7 +40,7 @@
                 android:id="@+id/textViewProductName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Product Name"
+                android:text="@string/product_name"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"/>
@@ -49,7 +49,7 @@
                 android:id="@+id/textViewProductPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$99.99"
+                android:text="@string/_100_000vnd"
                 android:textSize="18sp"
                 android:textColor="@color/text_primary"
                 android:textStyle="bold"

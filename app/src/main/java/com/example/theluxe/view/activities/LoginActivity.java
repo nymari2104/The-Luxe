@@ -1,24 +1,19 @@
 package com.example.theluxe.view.activities;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.theluxe.MainActivity;
 import com.example.theluxe.R;
 import com.example.theluxe.viewmodel.LoginViewModel;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -52,8 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         buttonLogin.setOnClickListener(v -> {
-            String email = editTextEmail.getText().toString();
-            String password = editTextPassword.getText().toString();
+            String email = Objects.requireNonNull(editTextEmail.getText()).toString();
+            String password = Objects.requireNonNull(editTextPassword.getText()).toString();
             loginViewModel.login(email, password);
         });
 

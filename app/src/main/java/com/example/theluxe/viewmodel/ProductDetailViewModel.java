@@ -1,7 +1,7 @@
 package com.example.theluxe.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+
 import com.example.theluxe.model.Product;
 import com.example.theluxe.repository.CartRepository;
 import com.example.theluxe.repository.ProductRepository;

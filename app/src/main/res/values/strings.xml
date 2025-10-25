@@ -11,4 +11,20 @@
     <string name="terms_of_service_content">These terms and conditions outline the rules and regulations for the use of The Luxe\'s Website, located at theluxe.com.</string>
     <string name="copyright_policy_content">All content included on this app, such as text, graphics, logos, images, is the property of The Luxe or its content suppliers and protected by international copyright laws.</string>
     <string name="faq_content">This is the FAQ content. Q: How do I return an item? A: Please contact our support team.</string>
+    <string name="chat_with_admin">Chat with Admin</string>
+    <string name="faq">FAQ</string>
+    <string name="support">Support</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="add_to_wishlist">Add to Wishlist</string>
+    <string name="complete_the_outfit">Complete the Outfit</string>
+    <string name="decrease_quantity">Decrease quantity</string>
+    <string name="_1">1</string>
+    <string name="increase_quantity">Increase quantity</string>
+    <string name="total_0_vnd">Total: 0 VND</string>
+    <string name="proceed_to_vnpay">Proceed to VNPay</string>
+    <string name="enter_message">Enter message</string>
+    <string name="send">Send</string>
+    <string name="product_name">Product Name</string>
+    <string name="_100_000vnd">$100,000VND</string>
+    <string name="checkout">Checkout</string>
 </resources>

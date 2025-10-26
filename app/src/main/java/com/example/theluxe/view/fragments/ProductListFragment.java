@@ -19,6 +19,8 @@ import com.example.theluxe.viewmodel.ProductViewModel;
 import com.example.theluxe.viewmodel.RecommendationViewModel;
 import com.example.theluxe.viewmodel.WishlistViewModel;
 
+import android.widget.SearchView;
+
 public class ProductListFragment extends Fragment {
 
     private ProductViewModel productViewModel;
@@ -28,6 +30,7 @@ public class ProductListFragment extends Fragment {
     private RecyclerView recyclerViewProducts, recyclerViewRecommendations;
     private ProductAdapter productAdapter;
     private FeaturedProductAdapter featuredAdapter;
+    private SearchView searchViewProducts;
 
     @Nullable
     @Override
@@ -43,6 +46,21 @@ public class ProductListFragment extends Fragment {
         recyclerViewProducts = view.findViewById(R.id.recyclerViewProducts);
         recyclerViewProducts.setLayoutManager(new GridLayoutManager(getContext(), 2));
         
+        searchViewProducts = view.findViewById(R.id.searchViewProducts);
+        searchViewProducts.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                productViewModel.searchProducts(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                productViewModel.searchProducts(newText);
+                return false;
+            }
+        });
+
         recyclerViewRecommendations = view.findViewById(R.id.recyclerViewRecommendations);
         recyclerViewRecommendations.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         new PagerSnapHelper().attachToRecyclerView(recyclerViewRecommendations);
@@ -65,10 +83,16 @@ public class ProductListFragment extends Fragment {
         productViewModel.getProducts();
 
         // Observe data
-        wishlistViewModel.getWishlist().observe(getViewLifecycleOwner(), wishlist -> productViewModel.products.observe(getViewLifecycleOwner(), products -> {
-            productAdapter = new ProductAdapter(products, wishlistViewModel, wishlist, userEmail);
-            recyclerViewProducts.setAdapter(productAdapter);
-        }));
+        wishlistViewModel.getWishlist().observe(getViewLifecycleOwner(), wishlist -> {
+            productViewModel.products.observe(getViewLifecycleOwner(), products -> {
+                productAdapter = new ProductAdapter(products, wishlistViewModel, wishlist, userEmail);
+                recyclerViewProducts.setAdapter(productAdapter);
+            });
+            productViewModel.searchResults.observe(getViewLifecycleOwner(), searchResults -> {
+                productAdapter = new ProductAdapter(searchResults, wishlistViewModel, wishlist, userEmail);
+                recyclerViewProducts.setAdapter(productAdapter);
+            });
+        });
         
         if (userEmail != null) {
             recommendationViewModel.getRecommendations(userEmail).observe(getViewLifecycleOwner(), recommendedProducts -> {

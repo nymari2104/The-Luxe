@@ -10,6 +10,7 @@ public class ProductViewModel extends ViewModel {
 
     private ProductRepository productRepository;
     public MutableLiveData<List<Product>> products = new MutableLiveData<>();
+    public MutableLiveData<List<Product>> searchResults = new MutableLiveData<>();
 
     public ProductViewModel() {
         productRepository = ProductRepository.getInstance();
@@ -17,5 +18,9 @@ public class ProductViewModel extends ViewModel {
 
     public void getProducts() {
         productRepository.getProducts(products);
+    }
+
+    public void searchProducts(String query) {
+        productRepository.searchProducts(query, searchResults);
     }
 }

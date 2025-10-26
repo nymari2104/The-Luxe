@@ -60,4 +60,20 @@ public class ProductRepository {
         }
         recommendations.setValue(recommendedProducts);
     }
+
+    public void searchProducts(String query, MutableLiveData<List<Product>> searchResults) {
+        List<Product> filteredProducts = new ArrayList<>();
+        if (query == null || query.trim().isEmpty()) {
+            searchResults.setValue(productList);
+            return;
+        }
+        String lowerCaseQuery = query.toLowerCase();
+        for (Product product : productList) {
+            if (product.getName().toLowerCase().contains(lowerCaseQuery) ||
+                product.getDescription().toLowerCase().contains(lowerCaseQuery)) {
+                filteredProducts.add(product);
+            }
+        }
+        searchResults.setValue(filteredProducts);
+    }
 }

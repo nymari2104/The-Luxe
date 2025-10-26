@@ -42,6 +42,7 @@ public class CartFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerViewCart);
         buttonCheckout = view.findViewById(R.id.buttonCheckout);
+        View emptyStateLayout = view.findViewById(R.id.emptyStateLayout);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         TextView textViewTotalAmount = view.findViewById(R.id.textViewTotalAmount);
@@ -61,13 +62,27 @@ public class CartFragment extends Fragment {
 
         cartViewModel.getCartWithProducts().observe(getViewLifecycleOwner(), cartItems -> {
             adapter.setCartItems(cartItems);
+            
+            // Show/hide empty state with animation
+            if (cartItems == null || cartItems.isEmpty()) {
+                recyclerView.setVisibility(View.GONE);
+                emptyStateLayout.setVisibility(View.VISIBLE);
+                emptyStateLayout.setAlpha(0f);
+                emptyStateLayout.animate().alpha(1f).setDuration(300).start();
+            } else {
+                emptyStateLayout.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
         });
 
         cartViewModel.getTotalAmount().observe(getViewLifecycleOwner(), total -> {
-            textViewTotalAmount.setText(String.format("Total: %,.0f₫", total));
+            textViewTotalAmount.setText(String.format("%,.0f₫", total));
         });
 
         buttonCheckout.setOnClickListener(v -> {
+            // Add haptic feedback
+            v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
+            
             Intent intent = new Intent(getActivity(), CheckoutActivity.class);
             intent.putExtra("USER_EMAIL", userEmail);
             intent.putExtra("TOTAL_AMOUNT", cartViewModel.getTotalAmount().getValue());

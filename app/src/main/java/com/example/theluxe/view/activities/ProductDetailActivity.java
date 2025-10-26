@@ -8,6 +8,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.theluxe.R;
 import com.example.theluxe.viewmodel.ProductDetailViewModel;
 
@@ -27,6 +29,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private Button buttonAddToCart, buttonAddToWishlist;
     private RecyclerView recyclerViewOutfit;
     private ProductAdapter outfitAdapter;
+    private android.view.View outfitSection;
 
     @SuppressLint("DefaultLocale")
     @Override
@@ -42,6 +45,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         buttonAddToCart = findViewById(R.id.buttonAddToCart);
         buttonAddToWishlist = findViewById(R.id.buttonAddToWishlist);
         recyclerViewOutfit = findViewById(R.id.recyclerViewOutfit);
+        outfitSection = findViewById(R.id.outfitSection);
 
         wishlistViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(WishlistViewModel.class);
         viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(ProductDetailViewModel.class);
@@ -59,7 +63,15 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         viewModel.product.observe(this, product -> {
             if (product != null) {
-                // Load image using Glide or Picasso in a real app
+                // Load product detail image with Glide
+                Glide.with(this)
+                        .load(product.getImageUrl())
+                        .placeholder(R.drawable.placeholder_product)
+                        .error(R.drawable.error_image)
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(imageViewProductDetail);
+
                 textViewProductNameDetail.setText(product.getName());
                 textViewProductBrandDetail.setText(product.getBrand());
                 textViewProductDescriptionDetail.setText(product.getDescription());
@@ -67,16 +79,19 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
-        // Observe wishlist and recommendations
+        // Observe outfit recommendations and wishlist together
         wishlistViewModel.getWishlist().observe(this, wishlist -> {
-            if (outfitAdapter != null) {
-                outfitAdapter.setWishlist(wishlist);
-            }
-        });
-
-        viewModel.outfitRecommendations.observe(this, products -> {
-            outfitAdapter = new ProductAdapter(products, wishlistViewModel, new ArrayList<>(), userEmail);
-            recyclerViewOutfit.setAdapter(outfitAdapter);
+            viewModel.outfitRecommendations.observe(this, products -> {
+                if (products != null && !products.isEmpty()) {
+                    // Show entire outfit section
+                    outfitSection.setVisibility(android.view.View.VISIBLE);
+                    outfitAdapter = new ProductAdapter(products, wishlistViewModel, wishlist, userEmail);
+                    recyclerViewOutfit.setAdapter(outfitAdapter);
+                } else {
+                    // Hide entire section if no recommendations
+                    outfitSection.setVisibility(android.view.View.GONE);
+                }
+            });
         });
 
         buttonAddToCart.setOnClickListener(v -> {

@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.theluxe.R;
 import com.example.theluxe.model.Product;
 import com.example.theluxe.view.activities.ProductDetailActivity;
@@ -34,7 +36,16 @@ public class FeaturedProductAdapter extends RecyclerView.Adapter<FeaturedProduct
         Product product = productList.get(position);
         holder.textViewProductName.setText(product.getName());
         holder.textViewProductBrand.setText(product.getBrand());
-        holder.textViewProductPrice.setText(String.format("$%.2f", product.getPrice()));
+        holder.textViewProductPrice.setText(String.format("%,.0f₫", product.getPrice()));
+
+        // Load featured product image with Glide
+        Glide.with(holder.itemView.getContext())
+                .load(product.getImageUrl())
+                .placeholder(R.drawable.placeholder_product)
+                .error(R.drawable.error_image)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.imageViewProduct);
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);

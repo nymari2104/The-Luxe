@@ -122,8 +122,7 @@ public class ProductRepository {
         }
         String lowerCaseQuery = query.toLowerCase();
         for (Product product : productList) {
-            if (product.getName().toLowerCase().contains(lowerCaseQuery) ||
-                product.getDescription().toLowerCase().contains(lowerCaseQuery)) {
+            if (product.getName().toLowerCase().startsWith(lowerCaseQuery)) {
                 filteredProducts.add(product);
             }
         }

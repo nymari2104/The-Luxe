@@ -32,6 +32,17 @@
                     android:paddingEnd="16dp"
                     android:paddingTop="16dp" />
 
+                <SearchView
+                    android:id="@+id/searchViewProducts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:queryHint="Search products..."
+                    android:iconifiedByDefault="false"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_spinner" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewRecommendations"
                     android:layout_width="match_parent"

@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.theluxe.R;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class ContactActivity extends AppCompatActivity {
+    private Button buttonViewMap;
 
     @SuppressLint("QueryPermissionsNeeded")
     @Override
@@ -16,14 +19,22 @@ public class ContactActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
 
-        Button buttonViewMap = findViewById(R.id.buttonViewMap);
+        buttonViewMap = findViewById(R.id.buttonViewMap);
         buttonViewMap.setOnClickListener(v -> {
-            // Create a Uri from an intent string. Use the result to create an Intent.
-            Uri gmmIntentUri = Uri.parse("geo:0,0?q=123+Luxury+Ave,+Fashion+City");
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-            mapIntent.setPackage("com.google.android.apps.maps");
-            if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                startActivity(mapIntent);
+            try {
+                String address = "Vinhome granpark S107, Nguyễn Xiển, Tp Thủ Đức";
+                String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8.toString());
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + encodedAddress);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                } else {
+                    String mapUrl = "https://www.google.com/maps/search/?api=1&query=" + encodedAddress;
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl));
+                    startActivity(webIntent);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }

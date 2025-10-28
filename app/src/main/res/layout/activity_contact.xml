@@ -17,7 +17,7 @@
         android:id="@+id/textViewPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Phone: +1 (555) 123-4567"
+        android:text="Phone: 0562322508"
         android:layout_marginBottom="8dp"/>
 
     <TextView
@@ -31,7 +31,7 @@
         android:id="@+id/textViewAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Address: 123 Luxury Ave, Fashion City, 54321"
+        android:text="Address: Vinhome granpark S107, Nguyễn Xiển, Tp Thủ Đức"
         android:layout_marginBottom="24dp"/>
 
     <Button

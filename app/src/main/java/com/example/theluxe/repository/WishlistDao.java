@@ -20,4 +20,7 @@ public interface WishlistDao {
 
     @Query("SELECT productId FROM wishlist WHERE userEmail = :userEmail")
     LiveData<List<String>> getWishlistedIdsForUser(String userEmail);
+
+    @Query("SELECT * FROM wishlist WHERE userEmail = :userEmail AND productId = :productId")
+    WishlistItem getWishlistItem(String userEmail, String productId);
 }

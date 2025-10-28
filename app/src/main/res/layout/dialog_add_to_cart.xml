@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/textViewDialogProductName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Product Name"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Size"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:layout_marginBottom="8dp"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroupSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <RadioButton android:id="@+id/radioS" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="S"/>
+        <RadioButton android:id="@+id/radioM" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="M"/>
+        <RadioButton android:id="@+id/radioL" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="L"/>
+        <RadioButton android:id="@+id/radioXL" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="XL"/>
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quantity"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:layout_marginBottom="8dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
+
+        <ImageButton
+            android:id="@+id/buttonDialogDecrease"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_remove"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Decrease quantity" />
+
+        <TextView
+            android:id="@+id/textViewDialogQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="1"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:textSize="18sp"/>
+
+        <ImageButton
+            android:id="@+id/buttonDialogIncrease"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_add"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Increase quantity" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonDialogAddToCart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add to Cart"/>
+
+</LinearLayout>

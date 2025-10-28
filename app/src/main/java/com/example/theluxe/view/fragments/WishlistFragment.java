@@ -38,14 +38,15 @@ public class WishlistFragment extends Fragment {
                 .get(WishlistViewModel.class);
 
         String userEmail = requireActivity().getIntent().getStringExtra("USER_EMAIL");
-        if (userEmail != null) {
-            wishlistViewModel.init(userEmail);
-        }
+        wishlistViewModel.init(userEmail);
 
-        wishlistViewModel.getWishlist().observe(getViewLifecycleOwner(), wishlist -> {
-            // Here, the product list and the wishlist are the same.
-            adapter = new ProductAdapter(wishlist, wishlistViewModel, wishlist, userEmail);
-            recyclerView.setAdapter(adapter);
+
+        adapter = new ProductAdapter(wishlistViewModel, userEmail);
+        recyclerView.setAdapter(adapter);
+
+        wishlistViewModel.getWishlist(userEmail).observe(getViewLifecycleOwner(), wishlist -> {
+            adapter.submitList(wishlist);
+            adapter.updateWishlist(wishlist); // Also update the internal wishlist for star state
         });
     }
 }

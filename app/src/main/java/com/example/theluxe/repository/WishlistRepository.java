@@ -61,8 +61,19 @@ public class WishlistRepository {
             wishlistDao.delete(new WishlistItem(userEmail, productId));
         });
     }
-    
+
     public LiveData<List<String>> getWishlistedIds(String userEmail) {
         return wishlistDao.getWishlistedIdsForUser(userEmail);
+    }
+    
+    public void toggleWishlist(String userEmail, String productId) {
+        executorService.execute(() -> {
+            WishlistItem item = wishlistDao.getWishlistItem(userEmail, productId);
+            if (item != null) {
+                wishlistDao.delete(item);
+            } else {
+                wishlistDao.insert(new WishlistItem(userEmail, productId));
+            }
+        });
     }
 }

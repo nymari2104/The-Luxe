@@ -7,10 +7,11 @@ public class Product {
     private String description;
     private double price;
     private String imageUrl;
-    private String styleTag;
-    private String outfitId;
+    private final String styleTag;
+    private final String outfitId;
+    private String category;
 
-    public Product(String id, String name, String brand, String description, double price, String imageUrl, String styleTag, String outfitId) {
+    public Product(String id, String name, String brand, String description, double price, String imageUrl, String styleTag, String outfitId, String category) {
         this.id = id;
         this.name = name;
         this.brand = brand;
@@ -19,6 +20,7 @@ public class Product {
         this.imageUrl = imageUrl;
         this.styleTag = styleTag;
         this.outfitId = outfitId;
+        this.category = category;
     }
 
     // Getters
@@ -30,4 +32,5 @@ public class Product {
     public String getImageUrl() { return imageUrl; }
     public String getStyleTag() { return styleTag; }
     public String getOutfitId() { return outfitId; }
+    public String getCategory() { return category; }
 }

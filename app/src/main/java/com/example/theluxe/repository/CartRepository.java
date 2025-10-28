@@ -36,16 +36,16 @@ public class CartRepository {
         return instance;
     }
 
-    public void addToCart(String userEmail, Product product) {
+    public void addToCart(String userEmail, Product product, String size, int quantity) {
         executorService.execute(() -> {
             CartItem existingItem = cartDao.getCartItem(userEmail, product.getId());
             if (existingItem != null) {
                 // Item exists, update quantity
-                existingItem.setQuantity(existingItem.getQuantity() + 1);
+                existingItem.setQuantity(existingItem.getQuantity() + quantity);
                 cartDao.insert(existingItem);
             } else {
                 // New item, add to cart
-                CartItem newItem = new CartItem(product.getId(), 1, userEmail);
+                CartItem newItem = new CartItem(product.getId(), quantity, userEmail, size);
                 cartDao.insert(newItem);
             }
         });

@@ -27,7 +27,7 @@ public class EditProfileFragment extends Fragment {
 
     private ProfileViewModel profileViewModel;
     private TextInputEditText editTextName, editTextAddress, editTextPhone, editTextAge, editTextHeight, editTextWeight;
-    private AutoCompleteTextView autoCompleteFashionStyle;
+    private AutoCompleteTextView autoCompleteFashionStyle, autoCompleteGender;
     private Button buttonUpdate;
     private com.google.android.material.button.MaterialButton buttonOrderHistory;
     private User currentUser;
@@ -49,12 +49,17 @@ public class EditProfileFragment extends Fragment {
         editTextHeight = view.findViewById(R.id.editTextHeight);
         editTextWeight = view.findViewById(R.id.editTextWeight);
         autoCompleteFashionStyle = view.findViewById(R.id.autoCompleteFashionStyle);
+        autoCompleteGender = view.findViewById(R.id.autoCompleteGender);
         buttonUpdate = view.findViewById(R.id.buttonUpdate);
         buttonOrderHistory = view.findViewById(R.id.buttonOrderHistory);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+        ArrayAdapter<CharSequence> styleAdapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.fashion_styles, android.R.layout.simple_spinner_item);
-        autoCompleteFashionStyle.setAdapter(adapter);
+        autoCompleteFashionStyle.setAdapter(styleAdapter);
+
+        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(requireContext(),
+                R.array.genders, android.R.layout.simple_spinner_item);
+        autoCompleteGender.setAdapter(genderAdapter);
 
         profileViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication())).get(ProfileViewModel.class);
 
@@ -73,6 +78,9 @@ public class EditProfileFragment extends Fragment {
 
                     if (user.getFashionStyle() != null) {
                         autoCompleteFashionStyle.setText(user.getFashionStyle(), false);
+                    }
+                    if (user.getGender() != null) {
+                        autoCompleteGender.setText(user.getGender(), false);
                     }
                 }
             });
@@ -99,6 +107,7 @@ public class EditProfileFragment extends Fragment {
                     // Handle case where fields might be empty
                 }
                 currentUser.setFashionStyle(autoCompleteFashionStyle.getText().toString());
+                currentUser.setGender(autoCompleteGender.getText().toString());
                 profileViewModel.updateUser(currentUser);
             }
         });

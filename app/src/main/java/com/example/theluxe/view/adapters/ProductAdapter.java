@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import java.util.ArrayList;
+import java.util.List;
 import com.example.theluxe.R;
 import com.example.theluxe.model.Product;
 import com.example.theluxe.view.activities.ProductDetailActivity;
@@ -22,27 +24,42 @@ import com.example.theluxe.viewmodel.WishlistViewModel;
 
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 
-    private List<Product> productList;
+public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductViewHolder> {
+
     private final WishlistViewModel wishlistViewModel;
-    private final List<Product> wishlist;
+    private List<Product> wishlist = new ArrayList<>();
     private final String userEmail;
     private int lastPosition = -1;
 
-    public ProductAdapter(List<Product> productList, WishlistViewModel wishlistViewModel, List<Product> wishlist, String userEmail) {
-        this.productList = productList;
+    public ProductAdapter(WishlistViewModel wishlistViewModel, String userEmail) {
+        super(DIFF_CALLBACK);
         this.wishlistViewModel = wishlistViewModel;
-        this.wishlist = wishlist;
         this.userEmail = userEmail;
-        setHasStableIds(true); // Optimize RecyclerView
     }
 
-    @Override
-    public long getItemId(int position) {
-        // Use product ID for stable IDs
-        return productList.get(position).getId().hashCode();
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateWishlist(List<Product> newWishlist) {
+        this.wishlist = newWishlist;
+        notifyDataSetChanged(); // Notify to re-check the star state
     }
+    
+    private static final DiffUtil.ItemCallback<Product> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<Product>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {
+                    return oldItem.getId().equals(newItem.getId());
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {
+                    // Add more checks if needed for content changes
+                    return oldItem.getName().equals(newItem.getName()) &&
+                           oldItem.getPrice() == newItem.getPrice();
+                }
+            };
 
     @NonNull
     @Override
@@ -51,77 +68,36 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         return new ProductViewHolder(view);
     }
 
-    @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Product product = productList.get(position);
+        Product product = getItem(position);
         holder.textViewProductName.setText(product.getName());
         holder.textViewProductBrand.setText(product.getBrand());
         holder.textViewProductPrice.setText(String.format("%,.0f₫", product.getPrice()));
 
-        // Load product image with Glide (supports both local and online)
         loadProductImage(holder.itemView.getContext(), holder.imageViewProduct, product.getImageUrl());
 
-        if (wishlist.stream().anyMatch(p -> p.getId().equals(product.getId()))) {
-            holder.buttonAddToWishlist.setImageResource(R.drawable.ic_star_filled);
-        } else {
-            holder.buttonAddToWishlist.setImageResource(R.drawable.ic_star_border);
-        }
+        boolean isWishlisted = wishlist.stream().anyMatch(p -> p.getId().equals(product.getId()));
+        holder.buttonAddToWishlist.setImageResource(isWishlisted ? R.drawable.ic_star_filled : R.drawable.ic_star_border);
 
-        // Add fade-in animation only for new items
         if (position > lastPosition) {
             holder.itemView.setAlpha(0f);
-            holder.itemView.animate()
-                    .alpha(1f)
-                    .setDuration(300)
-                    .setStartDelay((position - lastPosition) * 50L)
-                    .start();
+            holder.itemView.animate().alpha(1f).setDuration(300).setStartDelay((position - lastPosition) * 50L).start();
             lastPosition = position;
         }
 
         holder.itemView.setOnClickListener(v -> {
-            // Add haptic feedback
             v.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY);
-            
-            // Add scale animation on click
-            v.animate()
-                    .scaleX(0.95f)
-                    .scaleY(0.95f)
-                    .setDuration(100)
-                    .withEndAction(() -> {
-                        v.animate()
-                                .scaleX(1f)
-                                .scaleY(1f)
-                                .setDuration(100)
-                                .start();
-                        
-                        Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
-                        intent.putExtra("PRODUCT_ID", product.getId());
-                        intent.putExtra("USER_EMAIL", userEmail);
-                        v.getContext().startActivity(intent);
-                    })
-                    .start();
+            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+            intent.putExtra("PRODUCT_ID", product.getId());
+            intent.putExtra("USER_EMAIL", userEmail);
+            v.getContext().startActivity(intent);
         });
 
         holder.buttonAddToWishlist.setOnClickListener(v -> {
-            // Add haptic feedback
             v.performHapticFeedback(android.view.HapticFeedbackConstants.CLOCK_TICK);
-            
-            // Add scale animation for wishlist button
-            v.animate()
-                    .scaleX(1.3f)
-                    .scaleY(1.3f)
-                    .setDuration(150)
-                    .withEndAction(() -> {
-                        v.animate()
-                                .scaleX(1f)
-                                .scaleY(1f)
-                                .setDuration(150)
-                                .start();
-                    })
-                    .start();
-
-            if (wishlist.stream().anyMatch(p -> p.getId().equals(product.getId()))) {
+            boolean isCurrentlyWishlisted = wishlist.stream().anyMatch(p -> p.getId().equals(product.getId()));
+            if (isCurrentlyWishlisted) {
                 wishlistViewModel.removeFromWishlist(product);
                 Toast.makeText(v.getContext(), "💔 Removed from wishlist", Toast.LENGTH_SHORT).show();
             } else {
@@ -129,18 +105,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 Toast.makeText(v.getContext(), "❤️ Added to wishlist", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @Override
-    public int getItemCount() {
-        return (productList != null) ? productList.size() : 0;
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void setWishlist(List<Product> wishlist) {
-        this.wishlist.clear();
-        this.wishlist.addAll(wishlist);
-        notifyDataSetChanged();
     }
 
     /**

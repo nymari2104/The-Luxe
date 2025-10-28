@@ -34,7 +34,7 @@ public class Order {
     public static Order fromCartItems(String orderId, Date orderDate, double totalAmount, List<CartItemWithProduct> itemsWithProducts, String status, String userEmail) {
         List<CartItem> items = new ArrayList<>();
         for (CartItemWithProduct item : itemsWithProducts) {
-            items.add(new CartItem(item.getProduct().getId(), item.getQuantity(), userEmail));
+            items.add(new CartItem(item.getProduct().getId(), item.getQuantity(), userEmail, null));
         }
         return new Order(orderId, orderDate, totalAmount, items, status, userEmail);
     }

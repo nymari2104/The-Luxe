@@ -18,63 +18,63 @@ public class ProductRepository {
             "Premium cotton t-shirt with a timeless design. Perfect for everyday wear.", 
             499000, 
             "drawable://classic_white_t_shirt", 
-            "Classic", "outfit1"));
+            "Classic", "outfit1", "Top"));
             
         productList.add(new Product("6", "Classic Blue Jeans", "Denim Co", 
             "Classic fit jeans made from premium denim. Comfortable and durable.", 
             1299000, 
             "drawable://classic_blue_jeans", 
-            "Classic", "outfit1"));
+            "Classic", "outfit1", "Pants"));
             
         productList.add(new Product("7", "White Leather Sneakers", "Urban Steps", 
             "Clean white sneakers with premium leather finish. Minimalist design.", 
             999000, 
             "drawable://sneaker", 
-            "Classic", "outfit1"));
+            "Classic", "outfit1", "Shoes"));
 
         // Streetwear Outfit 2
         productList.add(new Product("2", "Black Leather Jacket", "Street Elite", 
             "Genuine leather jacket with modern cut. Perfect for street style.", 
             2999000, 
             "drawable://black_leather_jacket", 
-            "Streetwear", "outfit2"));
+            "Streetwear", "outfit2", "Jacket"));
             
         productList.add(new Product("5", "Graphic Hoodie", "Urban Wear", 
             "Oversized hoodie with unique graphic design. 100% cotton fleece.", 
             1299000, 
             "drawable://graphic_hoodie", 
-            "Streetwear", "outfit2"));
+            "Streetwear", "outfit2", "Jacket"));
             
         productList.add(new Product("8", "Black Cargo Pants", "Tactical Style", 
             "Multi-pocket cargo pants with modern fit. Durable and stylish.", 
             1499000, 
             "drawable://black_pants", 
-            "Streetwear", "outfit2"));
+            "Streetwear", "outfit2", "Pants"));
 
         // Chic Outfit 3
         productList.add(new Product("3", "Designer Slim Jeans", "Luxury Denim", 
             "High-end designer jeans with perfect fit. Premium Italian denim.", 
             1499000, 
             "drawable://slim_jeans", 
-            "Chic", "outfit3"));
+            "Chic", "outfit3", "Pants"));
             
         productList.add(new Product("4", "Linen Summer Shirt", "Coastal Wear", 
             "Breathable linen shirt perfect for summer. Relaxed fit.", 
             899000, 
             "drawable://summer_shirt", 
-            "Chic", "outfit3"));
+            "Chic", "outfit3", "Top"));
             
         productList.add(new Product("9", "Minimalist Watch", "Timepiece Co", 
             "Swiss-made minimalist watch with leather strap. Elegant design.", 
             3499000, 
             "drawable://mini_watch", 
-            "Chic", "outfit3"));
+            "Chic", "outfit3", "Accessory"));
             
         productList.add(new Product("10", "Leather Crossbody Bag", "Luxury Goods", 
             "Handcrafted Italian leather bag. Perfect for daily essentials.", 
             2299000, 
             "drawable://bag", 
-            "Chic", "outfit3"));
+            "Chic", "outfit3", "Accessory"));
     }
 
     public static ProductRepository getInstance() {
@@ -105,10 +105,17 @@ public class ProductRepository {
         }
 
         String outfitId = currentProduct.getOutfitId();
+        String currentCategory = currentProduct.getCategory();
         List<Product> recommendedProducts = new ArrayList<>();
+        List<String> usedCategories = new ArrayList<>();
+        usedCategories.add(currentCategory); // Exclude current product's category
+
         for (Product product : productList) {
             if (outfitId.equals(product.getOutfitId()) && !productId.equals(product.getId())) {
-                recommendedProducts.add(product);
+                if (!usedCategories.contains(product.getCategory())) {
+                    recommendedProducts.add(product);
+                    usedCategories.add(product.getCategory());
+                }
             }
         }
         recommendations.setValue(recommendedProducts);

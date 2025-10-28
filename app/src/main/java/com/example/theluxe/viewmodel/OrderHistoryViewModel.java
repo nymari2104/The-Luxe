@@ -20,4 +20,8 @@ public class OrderHistoryViewModel extends AndroidViewModel {
     public LiveData<List<Order>> fetchOrders(String userEmail) {
         return orderRepository.getOrdersForUser(userEmail);
     }
+
+    public LiveData<Order> getOrderById(String orderId) {
+        return orderRepository.getOrderById(orderId);
+    }
 }

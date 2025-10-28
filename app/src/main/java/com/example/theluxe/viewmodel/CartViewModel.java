@@ -46,10 +46,6 @@ public class CartViewModel extends AndroidViewModel {
         return totalAmount;
     }
 
-    public void addToCart(String userEmail, Product product) {
-        cartRepository.addToCart(userEmail, product);
-    }
-
     public void updateQuantity(String userEmail, String productId, int quantity) {
         cartRepository.updateQuantity(userEmail, productId, quantity);
     }

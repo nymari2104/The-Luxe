@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.theluxe.R;
 import com.example.theluxe.model.Order;
+import android.content.Intent;
+import com.example.theluxe.view.activities.OrderDetailActivity;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -35,7 +37,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         holder.textViewOrderId.setText("Order #" + order.getOrderId().substring(0, 8));
         holder.textViewOrderDate.setText("Date: " + sdf.format(order.getOrderDate()));
         holder.textViewOrderStatus.setText("Status: " + order.getStatus());
-        holder.textViewOrderTotal.setText(String.format("Total: %,.0f VND", order.getTotalAmount() * 25000));
+        holder.textViewOrderTotal.setText(String.format("Total: %,.0f₫", order.getTotalAmount()));
+        
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), OrderDetailActivity.class);
+            intent.putExtra("ORDER_ID", order.getOrderId());
+            v.getContext().startActivity(intent);
+        });
     }
 
     @Override

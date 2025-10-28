@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.theluxe.MainActivity;
 import com.example.theluxe.R;
 import android.widget.TextView;
 import com.example.theluxe.model.CartItemWithProduct;
@@ -43,6 +44,14 @@ public class CartFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewCart);
         buttonCheckout = view.findViewById(R.id.buttonCheckout);
         View emptyStateLayout = view.findViewById(R.id.emptyStateLayout);
+        Button buttonBrowse = emptyStateLayout.findViewById(R.id.buttonEmptyAction);
+        buttonBrowse.setOnClickListener(v -> {
+            // Navigate to home fragment
+            if (getActivity() != null) {
+                ((MainActivity) getActivity()).navigateToHome();
+            }
+        });
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         TextView textViewTotalAmount = view.findViewById(R.id.textViewTotalAmount);
@@ -61,7 +70,7 @@ public class CartFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         cartViewModel.getCartWithProducts().observe(getViewLifecycleOwner(), cartItems -> {
-            adapter.setCartItems(cartItems);
+            adapter.submitList(cartItems);
             
             // Show/hide empty state with animation
             if (cartItems == null || cartItems.isEmpty()) {
@@ -99,9 +108,9 @@ public class CartFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                CartItemWithProduct item = adapter.getItem(position);
+                CartItemWithProduct item = adapter.getItemAt(position);
 
-                new AlertDialog.Builder(getContext())
+                new AlertDialog.Builder(requireContext())
                         .setTitle("Remove Item")
                         .setMessage("Are you sure you want to remove this item from the cart?")
                         .setPositiveButton("Yes", (dialog, which) -> cartViewModel.deleteItem(userEmail, item.getProduct().getId()))

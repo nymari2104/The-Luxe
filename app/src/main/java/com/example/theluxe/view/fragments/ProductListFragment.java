@@ -19,6 +19,7 @@ import com.example.theluxe.viewmodel.ProductViewModel;
 import com.example.theluxe.viewmodel.RecommendationViewModel;
 import com.example.theluxe.viewmodel.WishlistViewModel;
 
+import androidx.activity.OnBackPressedCallback;
 import android.widget.SearchView;
 
 public class ProductListFragment extends Fragment {
@@ -41,6 +42,17 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // This callback will only be called when MyFragment is at least Started.
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                // In this case, we do nothing to prevent the user from going back.
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+
 
         // Setup Views
         recyclerViewProducts = view.findViewById(R.id.recyclerViewProducts);
@@ -73,25 +85,28 @@ public class ProductListFragment extends Fragment {
         recommendationViewModel = new ViewModelProvider(this, 
                 ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication()))
                 .get(RecommendationViewModel.class);
-        
+
         String userEmail = requireActivity().getIntent().getStringExtra("USER_EMAIL");
-        if (userEmail != null) {
-            wishlistViewModel.init(userEmail);
-        }
+        wishlistViewModel.init(userEmail);
+
 
         // Fetch products once
         productViewModel.getProducts();
 
+        productAdapter = new ProductAdapter(wishlistViewModel, userEmail);
+        recyclerViewProducts.setAdapter(productAdapter);
+
         // Observe data
-        wishlistViewModel.getWishlist().observe(getViewLifecycleOwner(), wishlist -> {
-            productViewModel.products.observe(getViewLifecycleOwner(), products -> {
-                productAdapter = new ProductAdapter(products, wishlistViewModel, wishlist, userEmail);
-                recyclerViewProducts.setAdapter(productAdapter);
-            });
-            productViewModel.searchResults.observe(getViewLifecycleOwner(), searchResults -> {
-                productAdapter = new ProductAdapter(searchResults, wishlistViewModel, wishlist, userEmail);
-                recyclerViewProducts.setAdapter(productAdapter);
-            });
+        wishlistViewModel.getWishlist(userEmail).observe(getViewLifecycleOwner(), wishlist -> {
+            productAdapter.updateWishlist(wishlist);
+        });
+
+        productViewModel.products.observe(getViewLifecycleOwner(), products -> {
+            productAdapter.submitList(products);
+        });
+        
+        productViewModel.searchResults.observe(getViewLifecycleOwner(), searchResults -> {
+            productAdapter.submitList(searchResults);
         });
         
         if (userEmail != null) {

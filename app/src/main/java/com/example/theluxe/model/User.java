@@ -18,6 +18,7 @@ public class User {
     private double height;
     private double weight;
     private String fashionStyle;
+    private String gender;
 
     // A no-arg constructor is needed for Room
     public User() {
@@ -50,4 +51,6 @@ public class User {
     public void setWeight(double weight) { this.weight = weight; }
     public String getFashionStyle() { return fashionStyle; }
     public void setFashionStyle(String fashionStyle) { this.fashionStyle = fashionStyle; }
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
 }

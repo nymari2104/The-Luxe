@@ -16,12 +16,14 @@ import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
+    private BottomNavigationView bottomNav;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
         // as default, select the home fragment
@@ -66,4 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
                 return true;
             };
+
+    public void navigateToHome() {
+        bottomNav.setSelectedItemId(R.id.navigation_home);
+    }
 }

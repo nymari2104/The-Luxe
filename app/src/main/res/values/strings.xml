@@ -26,5 +26,10 @@
     <string name="send">Send</string>
     <string name="product_name">Product Name</string>
     <string name="_100_000vnd">$100,000VND</string>
+    <string-array name="genders">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
     <string name="checkout">Checkout</string>
 </resources>

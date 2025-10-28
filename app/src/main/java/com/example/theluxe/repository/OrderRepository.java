@@ -39,4 +39,8 @@ public class OrderRepository {
     public LiveData<List<Order>> getOrdersForUser(String userEmail) {
         return orderDao.getOrders(userEmail);
     }
+
+    public LiveData<Order> getOrderById(String orderId) {
+        return orderDao.getOrderById(orderId);
+    }
 }

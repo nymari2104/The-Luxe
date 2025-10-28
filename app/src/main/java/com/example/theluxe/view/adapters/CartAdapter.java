@@ -20,31 +20,37 @@ import com.example.theluxe.viewmodel.CartViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 
-    private List<CartItemWithProduct> items = new ArrayList<>();
+public class CartAdapter extends ListAdapter<CartItemWithProduct, CartAdapter.CartViewHolder> {
+
     private final CartViewModel viewModel;
     private final String userEmail;
 
     public CartAdapter(CartViewModel viewModel, String userEmail) {
+        super(DIFF_CALLBACK);
         this.viewModel = viewModel;
         this.userEmail = userEmail;
-        setHasStableIds(true); // Optimize RecyclerView
     }
 
-    @Override
-    public long getItemId(int position) {
-        return items.get(position).getProduct().getId().hashCode();
+    private static final DiffUtil.ItemCallback<CartItemWithProduct> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<CartItemWithProduct>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull CartItemWithProduct oldItem, @NonNull CartItemWithProduct newItem) {
+                    return oldItem.getProduct().getId().equals(newItem.getProduct().getId());
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull CartItemWithProduct oldItem, @NonNull CartItemWithProduct newItem) {
+                    return oldItem.getQuantity() == newItem.getQuantity();
+                }
+            };
+            
+    public CartItemWithProduct getItemAt(int position) {
+        return getItem(position);
     }
 
-    public void setCartItems(List<CartItemWithProduct> items) {
-        this.items = items;
-        notifyDataSetChanged();
-    }
-
-    public CartItemWithProduct getItem(int position) {
-        return items.get(position);
-    }
 
     @NonNull
     @Override
@@ -55,7 +61,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
-        CartItemWithProduct item = items.get(position);
+        CartItemWithProduct item = getItem(position);
         holder.textViewCartItemName.setText(item.getProduct().getName());
         holder.textViewCartItemPrice.setText(String.format("%,.0f₫", item.getProduct().getPrice()));
         holder.textViewCartItemQuantity.setText(String.valueOf(item.getQuantity()));
@@ -63,60 +69,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         double itemTotal = item.getProduct().getPrice() * item.getQuantity();
         holder.textViewItemTotal.setText(String.format("Total: %,.0f₫", itemTotal));
 
-        // Load cart item image with Glide (supports both local and online)
         loadProductImage(holder.itemView.getContext(), holder.imageViewCartItem, item.getProduct().getImageUrl());
 
-        // Add fade-in animation for cart items
         holder.itemView.setAlpha(0f);
-        holder.itemView.animate()
-                .alpha(1f)
-                .setDuration(300)
-                .start();
+        holder.itemView.animate().alpha(1f).setDuration(300).start();
 
         holder.buttonIncrease.setOnClickListener(v -> {
-            // Add haptic feedback
             v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-            
-            // Add scale animation
-            v.animate()
-                    .scaleX(1.2f)
-                    .scaleY(1.2f)
-                    .setDuration(100)
-                    .withEndAction(() -> {
-                        v.animate()
-                                .scaleX(1f)
-                                .scaleY(1f)
-                                .setDuration(100)
-                                .start();
-                    })
-                    .start();
-            
             viewModel.updateQuantity(userEmail, item.getProduct().getId(), item.getQuantity() + 1);
         });
 
         holder.buttonDecrease.setOnClickListener(v -> {
-            // Add haptic feedback
             v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-            
-            // Add scale animation
-            v.animate()
-                    .scaleX(1.2f)
-                    .scaleY(1.2f)
-                    .setDuration(100)
-                    .withEndAction(() -> {
-                        v.animate()
-                                .scaleX(1f)
-                                .scaleY(1f)
-                                .setDuration(100)
-                                .start();
-                    })
-                    .start();
-            
             int newQuantity = item.getQuantity() - 1;
             if (newQuantity > 0) {
                 viewModel.updateQuantity(userEmail, item.getProduct().getId(), newQuantity);
             } else {
-                // Show confirmation dialog
                 new AlertDialog.Builder(holder.itemView.getContext())
                         .setTitle("Remove Item")
                         .setMessage("Are you sure you want to remove this item from the cart?")
@@ -128,11 +96,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                         .show();
             }
         });
-    }
-
-    @Override
-    public int getItemCount() {
-        return items == null ? 0 : items.size();
     }
 
     /**

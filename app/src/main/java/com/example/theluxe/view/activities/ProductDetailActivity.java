@@ -63,14 +63,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         viewModel.product.observe(this, product -> {
             if (product != null) {
-                // Load product detail image with Glide
-                Glide.with(this)
-                        .load(product.getImageUrl())
-                        .placeholder(R.drawable.placeholder_product)
-                        .error(R.drawable.error_image)
-                        .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(imageViewProductDetail);
+                // Load product detail image with Glide (supports both local and online)
+                loadProductImage(product.getImageUrl(), imageViewProductDetail);
 
                 textViewProductNameDetail.setText(product.getName());
                 textViewProductBrandDetail.setText(product.getBrand());
@@ -103,5 +97,36 @@ public class ProductDetailActivity extends AppCompatActivity {
             viewModel.addToWishlist(userEmail);
             Toast.makeText(this, "Added to wishlist", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    /**
+     * Helper method to load images from both drawable resources and online URLs
+     * Supports both "drawable://filename" and "http(s)://..." formats
+     */
+    private void loadProductImage(String imageUrl, ImageView imageView) {
+        if (imageUrl.startsWith("drawable://")) {
+            // Load from local drawable resource
+            String drawableName = imageUrl.replace("drawable://", "").toLowerCase();
+            int resourceId = getResources().getIdentifier(drawableName, "drawable", getPackageName());
+            
+            Glide.with(this)
+                    .load(resourceId > 0 ? resourceId : R.drawable.error_image)
+                    .placeholder(R.drawable.placeholder_product)
+                    .error(R.drawable.error_image)
+                    .centerCrop()
+                    .into(imageView);
+        } else if (imageUrl.startsWith("http")) {
+            // Load from online URL
+            Glide.with(this)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.placeholder_product)
+                    .error(R.drawable.error_image)
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(imageView);
+        } else {
+            // Invalid URL format
+            imageView.setImageResource(R.drawable.error_image);
+        }
     }
 }

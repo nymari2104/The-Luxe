@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="80dp"
+    android:viewportWidth="200"
+    android:viewportHeight="80">
+    
+    <!-- "THE LUXE" text representation -->
+    <path
+        android:fillColor="@color/accent"
+        android:pathData="M20,20h8v4h-8z"/>
+    <path
+        android:fillColor="@color/accent"
+        android:pathData="M22,24h4v20h-4z"/>
+    
+    <!-- Decorative line -->
+    <path
+        android:fillColor="@color/accent"
+        android:strokeWidth="2"
+        android:pathData="M15,50h170"/>
+    
+    <!-- Subtitle "LUXURY FASHION" -->
+    <path
+        android:fillColor="@color/text_secondary"
+        android:pathData="M60,58h80v2h-80z"/>
+    
+</vector>
+
+
+

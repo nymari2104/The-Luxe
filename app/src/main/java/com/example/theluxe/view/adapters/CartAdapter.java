@@ -1,5 +1,6 @@
 package com.example.theluxe.view.adapters;
 
+import android.content.Context;
 import android.view.HapticFeedbackConstants;
 
 import android.app.AlertDialog;
@@ -62,14 +63,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         double itemTotal = item.getProduct().getPrice() * item.getQuantity();
         holder.textViewItemTotal.setText(String.format("Total: %,.0f₫", itemTotal));
 
-        // Load cart item image with Glide
-        Glide.with(holder.itemView.getContext())
-                .load(item.getProduct().getImageUrl())
-                .placeholder(R.drawable.placeholder_product)
-                .error(R.drawable.error_image)
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.imageViewCartItem);
+        // Load cart item image with Glide (supports both local and online)
+        loadProductImage(holder.itemView.getContext(), holder.imageViewCartItem, item.getProduct().getImageUrl());
 
         // Add fade-in animation for cart items
         holder.itemView.setAlpha(0f);
@@ -138,6 +133,37 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     @Override
     public int getItemCount() {
         return items == null ? 0 : items.size();
+    }
+
+    /**
+     * Helper method to load images from both drawable resources and online URLs
+     * Supports both "drawable://filename" and "http(s)://..." formats
+     */
+    private void loadProductImage(Context context, ImageView imageView, String imageUrl) {
+        if (imageUrl.startsWith("drawable://")) {
+            // Load from local drawable resource
+            String drawableName = imageUrl.replace("drawable://", "").toLowerCase();
+            int resourceId = context.getResources().getIdentifier(drawableName, "drawable", context.getPackageName());
+            
+            Glide.with(context)
+                    .load(resourceId > 0 ? resourceId : R.drawable.error_image)
+                    .placeholder(R.drawable.placeholder_product)
+                    .error(R.drawable.error_image)
+                    .centerCrop()
+                    .into(imageView);
+        } else if (imageUrl.startsWith("http")) {
+            // Load from online URL
+            Glide.with(context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.placeholder_product)
+                    .error(R.drawable.error_image)
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(imageView);
+        } else {
+            // Invalid URL format
+            imageView.setImageResource(R.drawable.error_image);
+        }
     }
 
     static class CartViewHolder extends RecyclerView.ViewHolder {

@@ -99,9 +99,18 @@ public class ProductDetailActivity extends AppCompatActivity {
             showAddToCartDialog();
         });
 
+        viewModel.isWishlisted.observe(this, isWishlisted -> {
+            if (isWishlisted) {
+                buttonAddToWishlist.setText("Remove from Wishlist");
+                // Or change icon: buttonAddToWishlist.setImageResource(R.drawable.ic_star_filled);
+            } else {
+                buttonAddToWishlist.setText("Add to Wishlist");
+                // Or change icon: buttonAddToWishlist.setImageResource(R.drawable.ic_star_border);
+            }
+        });
+
         buttonAddToWishlist.setOnClickListener(v -> {
-            viewModel.addToWishlist(userEmail);
-            Toast.makeText(this, "Added to wishlist", Toast.LENGTH_SHORT).show();
+            viewModel.toggleWishlist();
         });
     }
 

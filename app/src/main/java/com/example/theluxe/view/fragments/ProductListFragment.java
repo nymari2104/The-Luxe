@@ -111,7 +111,7 @@ public class ProductListFragment extends Fragment {
         
         if (userEmail != null) {
             recommendationViewModel.getRecommendations(userEmail).observe(getViewLifecycleOwner(), recommendedProducts -> {
-                featuredAdapter = new FeaturedProductAdapter(recommendedProducts);
+                featuredAdapter = new FeaturedProductAdapter(recommendedProducts, userEmail);
                 recyclerViewRecommendations.setAdapter(featuredAdapter);
             });
         }

@@ -20,9 +20,11 @@ import java.util.List;
 public class FeaturedProductAdapter extends RecyclerView.Adapter<FeaturedProductAdapter.FeaturedViewHolder> {
 
     private List<Product> productList;
+    private final String userEmail;
 
-    public FeaturedProductAdapter(List<Product> productList) {
+    public FeaturedProductAdapter(List<Product> productList, String userEmail) {
         this.productList = productList;
+        this.userEmail = userEmail;
     }
 
     @NonNull
@@ -42,11 +44,17 @@ public class FeaturedProductAdapter extends RecyclerView.Adapter<FeaturedProduct
         // Load featured product image with Glide (supports both local and online)
         loadProductImage(holder.itemView.getContext(), holder.imageViewProduct, product.getImageUrl());
 
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
-            intent.putExtra("PRODUCT_ID", product.getId());
-            v.getContext().startActivity(intent);
-        });
+                holder.itemView.setOnClickListener(v -> {
+
+                    Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+
+                    intent.putExtra("PRODUCT_ID", product.getId());
+
+                    intent.putExtra("USER_EMAIL", userEmail);
+
+                    v.getContext().startActivity(intent);
+
+                });
     }
 
     @Override

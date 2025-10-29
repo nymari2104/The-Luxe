@@ -18,6 +18,8 @@ import com.example.theluxe.model.User;
 import com.example.theluxe.repository.UserRepository;
 import androidx.lifecycle.LiveData;
 
+import androidx.lifecycle.MediatorLiveData;
+
 public class ProductDetailViewModel extends AndroidViewModel {
 
     private final ProductRepository productRepository;
@@ -28,6 +30,11 @@ public class ProductDetailViewModel extends AndroidViewModel {
 
     private final UserRepository userRepository;
     public LiveData<User> user;
+    
+    private LiveData<List<Product>> wishlist;
+    public final MediatorLiveData<Boolean> isWishlisted = new MediatorLiveData<>();
+
+    private boolean initialized = false;
 
     public ProductDetailViewModel(@NonNull Application application) {
         super(application);
@@ -38,8 +45,25 @@ public class ProductDetailViewModel extends AndroidViewModel {
     }
 
     public void init(String userEmail, String productId) {
+        if (initialized) return; // tránh addSource lần nữa
+        initialized = true;
         user = userRepository.getUser(userEmail);
         getProductById(productId);
+        wishlist = wishlistRepository.getWishlistForUser(userEmail);
+
+        isWishlisted.addSource(product, p -> updateIsWishlisted());
+        isWishlisted.addSource(wishlist, w -> updateIsWishlisted());
+    }
+
+    private void updateIsWishlisted() {
+        Product currentProduct = product.getValue();
+        List<Product> currentWishlist = wishlist.getValue();
+        if (currentProduct != null && currentWishlist != null) {
+            boolean isProductInWishlist = currentWishlist.stream().anyMatch(p -> p.getId().equals(currentProduct.getId()));
+            isWishlisted.setValue(isProductInWishlist);
+        } else {
+            isWishlisted.setValue(false);
+        }
     }
 
     public void getProductById(String productId) {

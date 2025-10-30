@@ -10,6 +10,10 @@ import com.example.theluxe.repository.OrderRepository;
 import java.util.Date;
 import java.util.UUID;
 
+import java.util.stream.Collectors;
+import com.example.theluxe.model.OrderDetailItem;
+import java.util.List;
+
 public class CheckoutViewModel extends AndroidViewModel {
 
     private final CartRepository cartRepository;
@@ -35,12 +39,23 @@ public class CheckoutViewModel extends AndroidViewModel {
         if (Boolean.TRUE.equals(paymentStatus.getValue())) {
             String orderId = UUID.randomUUID().toString();
             cartRepository.getCartWithProducts(userEmail).observeForever(cartItems -> {
-                if (cartItems != null) {
-                    Order newOrder = Order.fromCartItems(
+                if (cartItems != null && !cartItems.isEmpty()) {
+                    List<OrderDetailItem> orderDetailItems = cartItems.stream()
+                            .map(item -> new OrderDetailItem(
+                                    item.getProduct().getId(),
+                                    item.getProduct().getName(),
+                                    item.getProduct().getBrand(),
+                                    item.getProduct().getPrice(),
+                                    item.getQuantity(),
+                                    item.getSize(), // Save the size
+                                    item.getProduct().getImageUrl() // Save the image URL
+                            )).collect(Collectors.toList());
+
+                    Order newOrder = new Order(
                             orderId,
                             new Date(),
                             totalAmount.getValue(),
-                            cartItems,
+                            orderDetailItems,
                             "Processing",
                             userEmail
                     );

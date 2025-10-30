@@ -22,20 +22,20 @@ public class Converters {
     }
 
     @TypeConverter
-    public static String fromCartItemList(List<CartItem> cartItems) {
-        if (cartItems == null) {
+    public static String fromOrderDetailItemList(List<OrderDetailItem> orderDetailItems) {
+        if (orderDetailItems == null) {
             return null;
         }
-        Type listType = new TypeToken<List<CartItem>>() {}.getType();
-        return gson.toJson(cartItems, listType);
+        Type listType = new TypeToken<List<OrderDetailItem>>() {}.getType();
+        return gson.toJson(orderDetailItems, listType);
     }
 
     @TypeConverter
-    public static List<CartItem> toCartItemList(String cartItemsString) {
-        if (cartItemsString == null) {
+    public static List<OrderDetailItem> toOrderDetailItemList(String orderDetailItemsString) {
+        if (orderDetailItemsString == null) {
             return Collections.emptyList();
         }
-        Type listType = new TypeToken<List<CartItem>>() {}.getType();
-        return gson.fromJson(cartItemsString, listType);
+        Type listType = new TypeToken<List<OrderDetailItem>>() {}.getType();
+        return gson.fromJson(orderDetailItemsString, listType);
     }
 }

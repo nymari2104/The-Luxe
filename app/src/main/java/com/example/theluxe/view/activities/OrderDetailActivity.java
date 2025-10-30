@@ -22,7 +22,6 @@ public class OrderDetailActivity extends AppCompatActivity {
     private TextView textViewOrderId, textViewOrderDate, textViewOrderStatus, textViewOrderTotal;
     private RecyclerView recyclerViewItems;
     private OrderDetailAdapter adapter;
-    private ProductRepository productRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +38,6 @@ public class OrderDetailActivity extends AppCompatActivity {
         adapter = new OrderDetailAdapter();
         recyclerViewItems.setAdapter(adapter);
 
-        productRepository = ProductRepository.getInstance(); // Get repository instance
-
         viewModel = new ViewModelProvider(this,
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()))
                 .get(OrderHistoryViewModel.class);
@@ -55,10 +52,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                     textViewOrderStatus.setText("Status: " + order.getStatus());
                     textViewOrderTotal.setText(String.format("Total: %,.0f₫", order.getTotalAmount()));
 
-                    List<CartItemWithProduct> itemsWithProducts = order.getItems().stream()
-                            .map(cartItem -> new CartItemWithProduct(productRepository.getProductById(cartItem.getProductId()), cartItem.getQuantity()))
-                            .collect(Collectors.toList());
-                    adapter.submitList(itemsWithProducts);
+                    adapter.submitList(order.getItems());
                 }
             });
         }

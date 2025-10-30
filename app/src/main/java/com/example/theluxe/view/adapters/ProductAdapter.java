@@ -96,6 +96,7 @@ public class ProductAdapter extends ListAdapter<Product, ProductAdapter.ProductV
 
         holder.buttonAddToWishlist.setOnClickListener(v -> {
             v.performHapticFeedback(android.view.HapticFeedbackConstants.CLOCK_TICK);
+            wishlistViewModel.setUserEmail(userEmail); // Ensure email is set before action
             boolean isCurrentlyWishlisted = wishlist.stream().anyMatch(p -> p.getId().equals(product.getId()));
             if (isCurrentlyWishlisted) {
                 wishlistViewModel.removeFromWishlist(product);

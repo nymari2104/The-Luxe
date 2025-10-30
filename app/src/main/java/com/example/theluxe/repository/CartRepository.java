@@ -65,7 +65,7 @@ public class CartRepository {
             for (CartItem item : cartItems) {
                 Product product = productRepository.getProductById(item.getProductId());
                 if (product != null) {
-                    result.add(new CartItemWithProduct(product, item.getQuantity()));
+                    result.add(new CartItemWithProduct(product, item.getQuantity(), item.getSize()));
                 }
             }
             return result;

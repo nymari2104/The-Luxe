@@ -27,6 +27,10 @@ public class WishlistViewModel extends AndroidViewModel {
         wishlistedIds = wishlistRepository.getWishlistedIds(userEmail);
     }
 
+    public void setUserEmail(String userEmail) {
+        this.currentUserEmail = userEmail;
+    }
+
     public LiveData<List<Product>> getWishlist(String userEmail) {
         return wishlistRepository.getWishlistForUser(userEmail);
     }
